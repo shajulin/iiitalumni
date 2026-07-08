@@ -1,223 +1,210 @@
 <?php
 /**
  * send_birthday_wishes.php
- * Standalone CLI script to query database, find matching birthdays,
- * log the wishes, embed tracking pixels, and email them using PHPMailer.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Scans ALL alumni tables for today's birthdays and sends HTML email wishes.
+ * Supports a CLI argument to simulate any date: php send_birthday_wishes.php 2026-07-08
+ * Logs every success/failure to tracking.log.
  */
 
-// Import database and configuration
 require_once __DIR__ . '/config.php';
-
-// Import PHPMailer classes from Composer autoloader
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Initialize Database Connection using mysqli
+// ── Logging helper ────────────────────────────────────────────────────────────
+$log_file = __DIR__ . '/tracking.log';
+function log_msg(string $msg): void {
+    global $log_file;
+    $line = '[' . date('Y-m-d H:i:s') . '] ' . $msg . "\n";
+    echo $line;
+    file_put_contents($log_file, $line, FILE_APPEND | LOCK_EX);
+}
+
+// ── Test-date argument: php send_birthday_wishes.php 2026-07-08 ───────────────
+$test_date = null;
+if (isset($argv[1]) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $argv[1])) {
+    $test_date = $argv[1];
+}
+
+// The month and day we compare birthdays against
+$compare_month = $test_date ? date('m', strtotime($test_date)) : date('m');
+$compare_day   = $test_date ? date('d', strtotime($test_date)) : date('d');
+
+$run_label = $test_date ? "TEST MODE (simulating {$test_date})" : "LIVE (today = " . date('Y-m-d') . ")";
+
+log_msg("=== Birthday Wisher Started | {$run_label} ===");
+
+// ── Database connection ───────────────────────────────────────────────────────
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
 if ($conn->connect_error) {
-    die("Database Connection failed: " . $conn->connect_error . "\n");
+    log_msg("FATAL: DB connection failed: " . $conn->connect_error);
+    exit(1);
 }
 
-echo "=== Birthday Wisher Execution: " . date('Y-m-d H:i:s') . " ===\n";
+// ── ALL alumni tables with their name & email columns ────────────────────────
+$tables = [
+    ['alumni_2016_batch',    'first_name',   'personal_email'],
+    ['alumni_2017_batch',    'first_name',   'personal_email'],
+    ['alumni_2019_admission','first_name',   'personal_email'],
+    ['alumni_2020_admission','first_name',   'personal_email'],
+    ['alumni_2021_admission','first_name',   'personal_email'],
+    ['alumni_details_2024',  'student_name', 'email'],
+];
 
-// Query alumni whose birthday (Month and Day) matches today's date
-// Handles dob in YYYY-MM-DD format (string or date)
-$query = "SELECT a." . COL_ID . ", a." . COL_NAME . ", a." . COL_EMAIL . ", a." . COL_DOB . "
-          FROM " . TABLE_ALUMNI . " a
-          LEFT JOIN birthday_wishes_log l
-            ON l.alumni_id = a." . COL_ID . "
-            AND l.sent_date = CURRENT_DATE()
-            AND l.status = 'sent'
-          WHERE a." . COL_EMAIL . " IS NOT NULL
-            AND a." . COL_EMAIL . " != ''
-            AND a." . COL_DOB . " IS NOT NULL
-            AND a." . COL_DOB . " != ''
-            AND DATE_FORMAT(a." . COL_DOB . ", '%m-%d') = DATE_FORMAT(NOW(), '%m-%d')
-            AND l.id IS NULL";
+$total_found  = 0;
+$total_sent   = 0;
+$total_failed = 0;
 
-$result = $conn->query($query);
+foreach ($tables as [$table, $name_col, $email_col]) {
+    
+    // 1. Query for today's birthdays in this table
+    $sql = "
+        SELECT id, {$name_col} AS name, {$email_col} AS email, dob
+        FROM `{$table}`
+        WHERE {$email_col} IS NOT NULL AND TRIM({$email_col}) != ''
+          AND dob IS NOT NULL AND TRIM(dob) != ''
+          AND MONTH(STR_TO_DATE(dob, '%Y-%m-%d')) = ? 
+          AND DAY(STR_TO_DATE(dob, '%Y-%m-%d')) = ?
+    ";
+    
+    // Note: If dob is stored in formats other than YYYY-MM-DD, the STR_TO_DATE above might fail.
+    // If it's a mix, a more robust way is needed, or ensuring consistent data format. 
+    // Assuming YYYY-MM-DD or similar standard format that MONTH()/DAY() can parse if it's a DATE type.
+    // If it's varchar 'YYYY-MM-DD', MySQL often implicitly converts for MONTH() if it resembles a date.
+    // Let's use string manipulation as fallback since we saw DATE_FORMAT work previously.
+    $sql = "
+        SELECT id, {$name_col} AS name, {$email_col} AS email, dob
+        FROM `{$table}`
+        WHERE {$email_col} IS NOT NULL AND TRIM({$email_col}) != ''
+          AND dob IS NOT NULL AND TRIM(dob) != ''
+          AND (
+                (MONTH(dob) = ? AND DAY(dob) = ?) OR 
+                (DATE_FORMAT(dob, '%m') = LPAD(?, 2, '0') AND DATE_FORMAT(dob, '%d') = LPAD(?, 2, '0'))
+              )
+    ";
 
-if (!$result) {
-    die("Query failed: " . $conn->error . "\n");
-}
-
-$count = $result->num_rows;
-echo "Found {$count} alumni celebrating their birthday today.\n";
-
-if ($count > 0) {
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        log_msg("  WARN: Could not prepare query for {$table}: " . $conn->error);
+        continue;
+    }
+    
+    $stmt->bind_param("iiii", $compare_month, $compare_day, $compare_month, $compare_day);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
     while ($alumni = $result->fetch_assoc()) {
-        $alumni_id = $alumni[COL_ID];
-        $name = $alumni[COL_NAME];
-        $email = $alumni[COL_EMAIL];
+        $total_found++;
+        $alumni_id = (int)$alumni['id'];
+        $name      = trim($alumni['name'] ?? 'Alumni');
+        $email     = trim($alumni['email']);
+
+        // 2. Check for duplicates today
+        $check_sql = "
+            SELECT id FROM birthday_wishes_log
+            WHERE alumni_id = ? AND table_name = ? AND sent_date = CURDATE() AND status = 'sent'
+        ";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("is", $alumni_id, $table);
+        $check_stmt->execute();
+        $check_res = $check_stmt->get_result();
         
-        echo "Processing: {$name} ({$email})...\n";
+        if ($check_res->num_rows > 0) {
+            log_msg("  SKIP: Already sent today to {$name} (id={$alumni_id}, table={$table})");
+            $check_stmt->close();
+            continue;
+        }
+        $check_stmt->close();
 
-        // 1. Pre-log the wish in the database to get the unique Log ID for tracking
-        $log_stmt = $conn->prepare("INSERT INTO birthday_wishes_log (alumni_id, sent_date, status, email_sent_to, is_read) VALUES (?, CURRENT_DATE(), 'pending', ?, 0)");
-        $log_stmt->bind_param("is", $alumni_id, $email);
-        $log_stmt->execute();
-        $log_id = $conn->insert_id;
-        $log_stmt->close();
+        log_msg("  Processing: {$name} <{$email}> (id={$alumni_id}, table={$table})");
 
-        // Generate tracking pixel URL (must be publicly accessible for Gmail proxy to reach it)
-        $tracking_url = TRACKING_BASE_URL . "?log_id=" . $log_id;
-        echo "   Tracking URL: {$tracking_url}\n";
+        // 3. Pre-insert log row (pending)
+        $ins = $conn->prepare("
+            INSERT INTO birthday_wishes_log
+                (alumni_id, table_name, sent_date, status, email_sent_to, is_read)
+            VALUES (?, ?, CURDATE(), 'pending', ?, 0)
+        ");
+        $ins->bind_param("iss", $alumni_id, $table, $email);
+        $ins->execute();
+        $log_id = (int)$conn->insert_id;
+        $ins->close();
 
-        // Create the HTML Email body with modern, responsive styling and tracking pixel
-        $email_body = "
+        // Build tracking pixel URL
+        $tracking_url = TRACKING_BASE_URL . "?log_id={$log_id}";
+
+        // Build HTML email
+        $year = date('Y');
+        $email_body = <<<HTML
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
-            <meta charset='utf-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>Happy Birthday!</title>
-            <style>
-                body {
-                    font-family: 'Outfit', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                    background-color: #f7f9fc;
-                    margin: 0;
-                    padding: 0;
-                    -webkit-font-smoothing: antialiased;
-                }
-                .email-container {
-                    max-width: 600px;
-                    margin: 40px auto;
-                    background: #ffffff;
-                    border-radius: 20px;
-                    overflow: hidden;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-                    border: 1px solid #eef2f5;
-                }
-                .header-banner {
-                    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-                    padding: 50px 30px;
-                    text-align: center;
-                    color: #ffffff;
-                }
-                .header-banner h1 {
-                    margin: 0;
-                    font-size: 32px;
-                    font-weight: 700;
-                    letter-spacing: -0.5px;
-                }
-                .header-banner p {
-                    margin: 10px 0 0 0;
-                    font-size: 16px;
-                    opacity: 0.9;
-                }
-                .content-body {
-                    padding: 40px 30px;
-                    color: #334155;
-                    line-height: 1.8;
-                }
-                .content-body h2 {
-                    font-size: 22px;
-                    color: #1e293b;
-                    margin-top: 0;
-                }
-                .wish-text {
-                    font-size: 16px;
-                    margin-bottom: 30px;
-                }
-                .card-deco {
-                    background: #f8fafc;
-                    border-left: 4px solid #6366f1;
-                    padding: 20px;
-                    border-radius: 0 12px 12px 0;
-                    margin: 25px 0;
-                    font-style: italic;
-                    color: #475569;
-                }
-                .footer {
-                    background-color: #f8fafc;
-                    padding: 25px 30px;
-                    text-align: center;
-                    font-size: 12px;
-                    color: #94a3b8;
-                    border-top: 1px solid #f1f5f9;
-                }
-                .footer a {
-                    color: #6366f1;
-                    text-decoration: none;
-                }
-            </style>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Happy Birthday!</title>
         </head>
-        <body>
-            <div class='email-container'>
-                <div class='header-banner'>
-                    <h1>Happy Birthday! 🎂</h1>
-                    <p>Wishing you a wonderful year ahead from your Alma Mater</p>
-                </div>
-                <div class='content-body'>
-                    <h2>Dear {$name},</h2>
-                    <p class='wish-text'>On behalf of the entire college community and the Alumni Association, we would like to wish you a very happy and joyous birthday!</p>
-                    
-                    <div class='card-deco'>
-                        \"May this year bring you closer to your dreams, fill your heart with joy, and bless you with health, success, and prosperity in all your future endeavors.\"
-                    </div>
-                    
-                    <p class='wish-text'>We are incredibly proud of your journey, and we look forward to staying connected with you. Feel free to visit the portal and share your achievements with us.</p>
-                    <p>Best Regards,<br><strong>Alumni Relations Team</strong></p>
-                </div>
-                <div class='footer'>
-                    <p>Sent with ❤️ from the Alumni Association Portal.</p>
-                    <p>&copy; " . date('Y') . " Alumni Association. All rights reserved.</p>
-                </div>
+        <body style="margin:0; padding:0; background:#f0f4ff; font-family:'Segoe UI',Arial,sans-serif;">
+          <div style="max-width:600px; margin:30px auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(99,102,241,.12);">
+            <div style="background:linear-gradient(135deg,#6366f1,#a855f7); padding:48px 32px; text-align:center; color:#fff;">
+              <h1 style="margin:0 0 8px; font-size:34px; font-weight:800; letter-spacing:-0.5px;">Happy Birthday! 🎂</h1>
+              <p style="margin:0; font-size:16px; opacity:.9;">Warmest wishes from your Alma Mater</p>
             </div>
-            <!-- Open Tracking Pixel: Must NOT use display:none - Gmail proxy won't load hidden images -->
-            <img src='{$tracking_url}' width='1' height='1' border='0' alt='' style='height:1px!important;width:1px!important;border-width:0!important;margin-top:0!important;margin-bottom:0!important;margin-right:0!important;margin-left:0!important;padding-top:0!important;padding-bottom:0!important;padding-right:0!important;padding-left:0!important;' />
+            <div style="padding:36px 32px; color:#334155; line-height:1.8;">
+              <h2 style="margin:0 0 16px; font-size:22px; color:#1e293b;">Dear {$name},</h2>
+              <p>On behalf of the entire Alumni Association and the college community, we wish you a very <strong>Happy Birthday</strong>! 🎉</p>
+              <div style="border-left:4px solid #6366f1; background:#f8fafc; padding:16px 20px; margin:24px 0; font-style:italic; color:#475569; border-radius:0 10px 10px 0;">
+                "May this special day mark the beginning of a year filled with joy, good health, great achievements, and endless possibilities."
+              </div>
+              <p>We are proud of everything you have accomplished and excited for everything that lies ahead. Stay connected with us through the Alumni Portal and keep inspiring!</p>
+              <p>With warm regards,<br><strong>Alumni Relations Team</strong><br><em>IIIT Kottayam</em></p>
+            </div>
+            <div style="background:#f8fafc; padding:20px 32px; text-align:center; font-size:12px; color:#94a3b8; border-top:1px solid #e2e8f0;">
+              <p>Sent with ❤️ by the Alumni Association Portal &copy; {$year}</p>
+            </div>
+          </div>
+          <img src="{$tracking_url}" width="1" height="1" border="0" alt="" style="height:1px!important;width:1px!important;border-width:0!important;margin:0!important;padding:0!important;" />
         </body>
-        </html>";
+        </html>
+        HTML;
 
-        // Initialize PHPMailer
+        // 4. Send Email
         $mail = new PHPMailer(true);
-
         try {
-            // SMTP Settings
-            $mail->SMTPDebug  = 0; // Disable verbose debug output in production
+            $mail->SMTPDebug  = 0;
             $mail->isSMTP();
             $mail->Host       = SMTP_HOST;
             $mail->SMTPAuth   = true;
             $mail->Username   = SMTP_USER;
             $mail->Password   = SMTP_PASS;
-            if (SMTP_PORT == 465) {
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL for port 465
-            } else {
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // STARTTLS for port 587
-            }
+            $mail->SMTPSecure = (SMTP_PORT == 465) ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = SMTP_PORT;
+            $mail->CharSet    = 'UTF-8';
 
-            // Recipients
             $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
             $mail->addAddress($email, $name);
-
-            // Content
             $mail->isHTML(true);
-            $mail->Subject = 'Warmest Birthday Wishes from your Alumni Association!';
+            $mail->Subject = "Happy Birthday, {$name}! 🎉";
             $mail->Body    = $email_body;
-            $mail->AltBody = "Dear {$name},\n\nHappy Birthday! Wishing you a wonderful year ahead.\n\nBest Regards,\nAlumni Association Team";
+            $mail->AltBody = "Dear {$name},\n\nHappy Birthday! Wishing you a wonderful year.\n\nBest Regards,\nAlumni Association Team";
 
-            // Send
             $mail->send();
-            
-            // 2. Update status to 'sent' on success
-            $conn->query("UPDATE birthday_wishes_log SET status = 'sent' WHERE id = " . $log_id);
-            echo "-> Email sent successfully to {$email}\n";
+
+            // Mark as sent
+            $conn->query("UPDATE birthday_wishes_log SET status='sent' WHERE id={$log_id}");
+            log_msg("  ✓ Sent to {$email}");
+            $total_sent++;
 
         } catch (Exception $e) {
-            // 3. Update status to 'failed' on failure
-            $error_msg = $conn->real_escape_string($mail->ErrorInfo);
-            $conn->query("UPDATE birthday_wishes_log SET status = 'failed' WHERE id = " . $log_id);
-            echo "-> Failed to send email to {$email}. PHPMailer Error: {$mail->ErrorInfo}\n";
+            $err = $conn->real_escape_string($mail->ErrorInfo);
+            $conn->query("UPDATE birthday_wishes_log SET status='failed' WHERE id={$log_id}");
+            log_msg("  ✗ FAILED to send to {$email}. Error: {$err}");
+            $total_failed++;
         }
     }
-} else {
-    echo "No birthdays today.\n";
+    $stmt->close();
 }
 
 $conn->close();
-echo "=== Execution Finished ===\n";
+log_msg("=== Done | Found: {$total_found} | Sent: {$total_sent} | Failed: {$total_failed} ===");
 ?>

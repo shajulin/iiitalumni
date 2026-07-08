@@ -1,2 +1,15 @@
 [2026-07-07 08:28:09] log_id=21 | IP=Unknown IP | UA=Unknown User-Agent | Ref=No referrer
 [2026-07-07 08:28:09] DB_UPDATE: SUCCESS - log_id=21 marked as READ.
+[2026-07-08 08:08:44] === Birthday Wisher Started | LIVE (today = 2026-07-08) ===
+[2026-07-08 08:08:44]   SKIP: Already sent today to hari (id=40, table=alumni_2016_batch)
+[2026-07-08 08:08:44]   SKIP: Already sent today to lakshmi (id=73, table=alumni_details_2024)
+[2026-07-08 08:08:44]   SKIP: Already sent today to sanmugamrajan (id=75, table=alumni_details_2024)
+[2026-07-08 08:08:44] === Done | Found: 3 | Sent: 0 | Failed: 0 ===
+[2026-07-08 08:18:27] === Birthday Wisher Started | LIVE (today = 2026-07-08) ===
+[2026-07-08 08:18:27]   Processing: hari <hari@gmail.com> (id=40, table=alumni_2016_batch)
+[2026-07-08 08:18:32]   ✓ Sent to hari@gmail.com
+[2026-07-08 08:18:32]   Processing: lakshmi <harihari81352@gmail.com> (id=73, table=alumni_details_2024)
+[2026-07-08 08:18:36]   ✓ Sent to harihari81352@gmail.com
+[2026-07-08 08:18:36]   Processing: sanmuga Rajan <rajansunmuga@gmail.com> (id=76, table=alumni_details_2024)
+[2026-07-08 08:18:41]   ✓ Sent to rajansunmuga@gmail.com
+[2026-07-08 08:18:41] === Done | Found: 3 | Sent: 3 | Failed: 0 ===

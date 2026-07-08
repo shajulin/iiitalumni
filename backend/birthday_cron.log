@@ -1,0 +1,42 @@
+[2026-07-08 07:30:33] === Birthday Wisher Started | TEST MODE (simulating 2026-07-08) ===
+[2026-07-08 07:30:33] ── Scanning table: alumni_2016_batch ──
+[2026-07-08 07:30:33]   Found 1 unsent birthday(s) in alumni_2016_batch.
+[2026-07-08 07:30:33]   Processing: hari <hari@gmail.com> (id=40)
+[2026-07-08 07:30:38]   ✓ Sent to hari@gmail.com
+[2026-07-08 07:30:38] ── Scanning table: alumni_2017_batch ──
+[2026-07-08 07:30:38]   Found 0 unsent birthday(s) in alumni_2017_batch.
+[2026-07-08 07:30:38] ── Scanning table: alumni_2019_admission ──
+[2026-07-08 07:30:38]   Found 0 unsent birthday(s) in alumni_2019_admission.
+[2026-07-08 07:30:38] ── Scanning table: alumni_2020_admission ──
+[2026-07-08 07:30:38]   Found 0 unsent birthday(s) in alumni_2020_admission.
+[2026-07-08 07:30:38] ── Scanning table: alumni_2021_admission ──
+[2026-07-08 07:30:38]   Found 0 unsent birthday(s) in alumni_2021_admission.
+[2026-07-08 07:30:38] ── Scanning table: alumni_details_2024 ──
+[2026-07-08 07:30:38]   Found 2 unsent birthday(s) in alumni_details_2024.
+[2026-07-08 07:30:38]   Processing: sanmugam <harihari81352@gmail.com> (id=72)
+[2026-07-08 07:30:43]   ✓ Sent to harihari81352@gmail.com
+[2026-07-08 07:30:43]   Processing: lakshmi <harihari81352@gmail.com> (id=73)
+[2026-07-08 07:30:48]   ✓ Sent to harihari81352@gmail.com
+[2026-07-08 07:30:48] === Done | Sent: 3 | Failed: 0 ===
+[2026-07-08 07:42:33] ====================================================
+[2026-07-08 07:42:33] Birthday Wisher Started — SIMULATION (2026-07-08)
+[2026-07-08 07:42:33] ====================================================
+[2026-07-08 07:42:33] ── Scanning [alumni_2016_batch] ──
+[2026-07-08 07:42:33]   Found 1 birthday match(es).
+[2026-07-08 07:42:33]   SKIP: hari <hari@gmail.com> — already processed today.
+[2026-07-08 07:42:33] ── Scanning [alumni_2017_batch] ──
+[2026-07-08 07:42:33]   Found 0 birthday match(es).
+[2026-07-08 07:42:33] ── Scanning [alumni_2019_admission] ──
+[2026-07-08 07:42:33]   Found 0 birthday match(es).
+[2026-07-08 07:42:33] ── Scanning [alumni_2020_admission] ──
+[2026-07-08 07:42:33]   Found 0 birthday match(es).
+[2026-07-08 07:42:33] ── Scanning [alumni_2021_admission] ──
+[2026-07-08 07:42:33]   Found 0 birthday match(es).
+[2026-07-08 07:42:33] ── Scanning [alumni_details_2024] ──
+[2026-07-08 07:42:33]   Found 2 birthday match(es).
+[2026-07-08 07:42:33]   SKIP: lakshmi <harihari81352@gmail.com> — already processed today.
+[2026-07-08 07:42:33]   PROCESSING: sanmugamrajan <harihari81352@gmail.com> (id=75, dob=2026-07-08)
+[2026-07-08 07:42:38]   ✓ SENT → harihari81352@gmail.com
+[2026-07-08 07:42:38] ====================================================
+[2026-07-08 07:42:38] Run complete — Found:3 | Sent:1 | Failed:0 | Skipped(already sent):2
+[2026-07-08 07:42:38] ====================================================

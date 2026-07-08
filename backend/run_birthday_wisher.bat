@@ -1,21 +1,37 @@
 @echo off
-:: ============================================================
-::  Alumni Portal - Automatic Birthday Wisher
-::  This script runs daily via Windows Task Scheduler.
-::  It sends birthday wishes to all alumni in alumni_details_2024
-::  whose DOB (Month + Day) matches today's date.
-:: ============================================================
+:: ================================================================
+::  Alumni Portal - Automatic Birthday Wisher Runner
+::  Called by Windows Task Scheduler every day at 8:00 AM
+::  Logs all output to tracking.log
+:: ================================================================
+set PHP_EXE=C:\xampp\php\php.exe
+if not exist "%PHP_EXE%" set PHP_EXE=D:\xampp\php\php.exe
 
-:: Log file path - all runs are recorded here for monitoring
-set LOG_FILE=D:\xampp\htdocs\alumni-portal\backend\birthday_cron.log
+set SCRIPT=C:\xampp\htdocs\alumni-portal\backend\send_birthday_wishes.php
+if not exist "%SCRIPT%" set SCRIPT=D:\xampp\htdocs\alumni-portal\backend\send_birthday_wishes.php
+if not exist "%SCRIPT%" set SCRIPT=%~dp0send_birthday_wishes.php
 
-echo. >> %LOG_FILE%
-echo ======================================================== >> %LOG_FILE%
-echo Run Started: %date% %time% >> %LOG_FILE%
-echo ======================================================== >> %LOG_FILE%
+set LOG=%~dp0tracking.log
 
-:: Run the PHP birthday wisher script and append output to log
-D:\xampp\php\php.exe D:\xampp\htdocs\alumni-portal\backend\send_birthday_wishes.php >> %LOG_FILE% 2>&1
+echo. >> "%LOG%"
+echo ======================================================== >> "%LOG%"
+echo Task Scheduler Run: %DATE% %TIME% >> "%LOG%"
+echo ======================================================== >> "%LOG%"
 
-echo Run Finished: %date% %time% >> %LOG_FILE%
-echo. >> %LOG_FILE%
+:: Ensure MySQL is running if XAMPP is installed locally
+:: Note: A better approach in production is setting MySQL as a Windows Service.
+tasklist /fi "imagename eq mysqld.exe" | find /i "mysqld.exe" > nul
+if errorlevel 1 (
+    echo MySQL is not running. Attempting to start... >> "%LOG%"
+    if exist "C:\xampp\mysql\bin\mysqld.exe" (
+        start "" /b "C:\xampp\mysql\bin\mysqld.exe"
+        timeout /t 5 > nul
+    ) else if exist "D:\xampp\mysql\bin\mysqld.exe" (
+        start "" /b "D:\xampp\mysql\bin\mysqld.exe"
+        timeout /t 5 > nul
+    )
+)
+
+"%PHP_EXE%" "%SCRIPT%" >> "%LOG%" 2>&1
+
+echo Finished: %DATE% %TIME% >> "%LOG%"
