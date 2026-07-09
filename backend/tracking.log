@@ -13,3 +13,16 @@
 [2026-07-08 08:18:36]   Processing: sanmuga Rajan <rajansunmuga@gmail.com> (id=76, table=alumni_details_2024)
 [2026-07-08 08:18:41]   ✓ Sent to rajansunmuga@gmail.com
 [2026-07-08 08:18:41] === Done | Found: 3 | Sent: 3 | Failed: 0 ===
+[2026-07-09 11:31:44] === Birthday Wisher Started | LIVE (today = 2026-07-09) ===
+[2026-07-09 11:31:44]   Processing: Rahul <rbarnwal4056@gmail.com> (id=3, table=alumni_2020_admission)
+[2026-07-09 11:31:50]   ✓ Sent to rbarnwal4056@gmail.com
+[2026-07-09 11:31:50]   Processing: Krishna Sampath <bvks2134@gmail.com> (id=75, table=alumni_2021_admission)
+[2026-07-09 11:50:33] === Birthday Wisher Started | LIVE (today = 2026-07-09) ===
+[2026-07-09 11:50:33]   Processing: HARI <harihari81352@gmail.com> (id=93, table=alumni_2019_admission)
+[2026-07-09 11:50:39]   ✓ Sent to harihari81352@gmail.com
+[2026-07-09 11:50:39]   SKIP: Already sent today to Rahul (id=3, table=alumni_2020_admission)
+[2026-07-09 11:50:39]   Processing: Krishna Sampath <bvks2134@gmail.com> (id=75, table=alumni_2021_admission)
+[2026-07-09 11:50:44]   ✓ Sent to bvks2134@gmail.com
+[2026-07-09 11:50:44]   Processing: K V <kvchakradhar74@gmail.com> (id=151, table=alumni_2021_admission)
+[2026-07-09 11:50:49]   ✓ Sent to kvchakradhar74@gmail.com
+[2026-07-09 11:50:49] === Done | Found: 4 | Sent: 3 | Failed: 0 ===
