@@ -43,15 +43,64 @@ if ($conn->connect_error) {
     exit(1);
 }
 
-// ── ALL alumni tables with their name & email columns ────────────────────────
-$tables = [
-    ['alumni_2016_batch',    'first_name',   'personal_email'],
-    ['alumni_2017_batch',    'first_name',   'personal_email'],
-    ['alumni_2019_admission','first_name',   'personal_email'],
-    ['alumni_2020_admission','first_name',   'personal_email'],
-    ['alumni_2021_admission','first_name',   'personal_email'],
-    ['alumni_details_2024',  'student_name', 'email'],
-];
+// ── DYNAMICALLY DETECT ALL ALUMNI TABLES AND THEIR COLUMNS ────────────────────
+// 1. Automatically detect every alumni table from the current database
+$tables = [];
+$res_tables = $conn->query("SHOW TABLES LIKE 'alumni\_%'"); // Using \_ to strictly match 'alumni_' prefix
+if ($res_tables) {
+    while ($row = $res_tables->fetch_array(MYSQLI_NUM)) {
+        $table_name = $row[0];
+        
+        // 2. For every detected table, automatically detect the column names
+        $res_cols = $conn->query("SHOW COLUMNS FROM `{$table_name}`");
+        if (!$res_cols) {
+            log_msg("  WARN: Could not fetch columns for {$table_name}");
+            continue;
+        }
+        
+        $cols = [];
+        while ($col_row = $res_cols->fetch_assoc()) {
+            $cols[] = $col_row['Field'];
+        }
+        
+        // Check for basic required columns: id and dob
+        if (!in_array('id', $cols) || !in_array('dob', $cols)) {
+            // 3. Skip any table that does not contain the required columns instead of crashing
+            log_msg("  SKIP: Table {$table_name} missing 'id' or 'dob' column");
+            continue; 
+        }
+        
+        // Detect name column
+        $name_col = null;
+        $possible_name_cols = ['first_name', 'student_name', 'name'];
+        foreach ($possible_name_cols as $pc) {
+            if (in_array($pc, $cols)) {
+                $name_col = $pc;
+                break;
+            }
+        }
+        
+        // Detect email column
+        $email_col = null;
+        $possible_email_cols = ['personal_email', 'email'];
+        foreach ($possible_email_cols as $pc) {
+            if (in_array($pc, $cols)) {
+                $email_col = $pc;
+                break;
+            }
+        }
+        
+        // Add to tables array if all required columns are found
+        if ($name_col && $email_col) {
+            $tables[] = [$table_name, $name_col, $email_col];
+        } else {
+            log_msg("  SKIP: Table {$table_name} missing name or email column");
+        }
+    }
+} else {
+    log_msg("FATAL: Failed to query tables: " . $conn->error);
+    exit(1);
+}
 
 $total_found  = 0;
 $total_sent   = 0;
