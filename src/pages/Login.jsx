@@ -16,7 +16,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost/backend/api/login.php', {
+      const response = await fetch('http://localhost/alumni-portal/backend/api/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

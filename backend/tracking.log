@@ -26,3 +26,26 @@
 [2026-07-09 11:50:44]   Processing: K V <kvchakradhar74@gmail.com> (id=151, table=alumni_2021_admission)
 [2026-07-09 11:50:49]   ✓ Sent to kvchakradhar74@gmail.com
 [2026-07-09 11:50:49] === Done | Found: 4 | Sent: 3 | Failed: 0 ===
+[2026-07-16 07:35:41] === Birthday Wisher Started | LIVE (today = 2026-07-16) ===
+[2026-07-16 07:35:41]   SKIP: Table alumni_details_2024 missing 'id' or 'dob' column
+[2026-07-16 07:35:41]   SKIP: Table alumni_higher_studies missing 'id' or 'dob' column
+[2026-07-16 07:35:41]   SKIP: Table alumni_profiles missing 'id' or 'dob' column
+[2026-07-16 07:38:17] === Birthday Wisher Started | LIVE (today = 2026-07-16) ===
+[2026-07-16 07:38:17]   SKIP: Table alumni_details_2024 missing 'id' or 'dob' column
+[2026-07-16 07:38:17]   SKIP: Table alumni_higher_studies missing 'id' or 'dob' column
+[2026-07-16 07:38:17]   SKIP: Table alumni_profiles missing 'id' or 'dob' column
+[2026-07-16 07:43:30] === Birthday Wisher Started | LIVE (today = 2026-07-16) ===
+[2026-07-16 07:43:30]   SKIP: Table alumni_details_2024 missing 'id' or 'dob' column
+[2026-07-16 07:43:30]   SKIP: Table alumni_higher_studies missing 'id' or 'dob' column
+[2026-07-16 07:43:30]   SKIP: Table alumni_profiles missing 'id' or 'dob' column
+[2026-07-16 07:57:59] === Birthday Wisher Started | LIVE (today = 2026-07-16) ===
+[2026-07-16 07:57:59]   SKIP: Table alumni_details_2024 missing 'id' or 'dob' column
+[2026-07-16 07:57:59]   SKIP: Table alumni_higher_studies missing 'id' or 'dob' column
+[2026-07-16 07:57:59]   SKIP: Table alumni_profiles missing 'id' or 'dob' column
+[2026-07-16 07:57:59]   Processing: selva <harihari81352@gmail.com> (id=32, table=alumni_2016_batch)
+[2026-07-16 07:58:04]   ✓ Sent to harihari81352@gmail.com
+[2026-07-16 07:58:04]   Processing: harirama <harihari81352@gmail.com> (id=61, table=alumni_2017_batch)
+[2026-07-16 07:58:08]   ✓ Sent to harihari81352@gmail.com
+[2026-07-16 07:58:08]   Processing: Prudhvi Reddy <prudhvireddyvenati@gmail.com> (id=30, table=alumni_2019_admission)
+[2026-07-16 07:58:12]   ✓ Sent to prudhvireddyvenati@gmail.com
+[2026-07-16 07:58:12] === Done | Found: 3 | Sent: 3 | Failed: 0 ===
