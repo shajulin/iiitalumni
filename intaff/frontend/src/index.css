@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-intaff-dark: #0f172a;
+  --color-intaff-navy: #1e293b;
+  --color-intaff-teal: #0d9488;
+  --color-intaff-gold: #f59e0b;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+  .glass-dark {
+    @apply bg-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-xl text-white;
+  }
+  
+  @keyframes marquee-ltr {
+    0% { transform: translateX(-100vw); }
+    100% { transform: translateX(100vw); }
+  }
+  .animate-marquee-ltr {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee-ltr 25s linear infinite;
+  }
+  
+  @keyframes marquee-rtl {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-100vw); }
+  }
+  .animate-marquee-rtl {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee-rtl 25s linear infinite;
+  }
+}
