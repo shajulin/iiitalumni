@@ -30,7 +30,7 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost/alumni-portal/backend/api/register.php', {
+      const response = await fetch('/alumni-portal/backend/api/register.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

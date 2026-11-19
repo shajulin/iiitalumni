@@ -164,10 +164,10 @@ if(
                 ':remarks'          => '',
             ]);
 
-        } else {
-            // 2017, 2019, 2020, 2021 admission tables (same structure, no permanent_address)
+        } elseif ($batchTable === 'alumni_2017_batch') {
+            // 2017 batch has mailing_address
             $batch_stmt = $conn->prepare(
-                "INSERT INTO $batchTable (timestamp, username, first_name, last_name, dob, roll_no, mailing_address, city, state, country, pincode, gender, whatsapp_no, personal_email, present_status, organization, remarks)
+                "INSERT INTO alumni_2017_batch (timestamp, username, first_name, last_name, dob, roll_no, mailing_address, city, state, country, pincode, gender, whatsapp_no, personal_email, present_status, organization, remarks)
                  VALUES (:timestamp, :username, :first_name, :last_name, :dob, :roll_no, :mailing_address, :city, :state, :country, :pincode, :gender, :whatsapp_no, :personal_email, :present_status, :organization, :remarks)"
             );
             $batch_stmt->execute([
@@ -178,6 +178,31 @@ if(
                 ':dob'             => '',
                 ':roll_no'         => $rollNumber,
                 ':mailing_address' => '',
+                ':city'            => '',
+                ':state'           => '',
+                ':country'         => '',
+                ':pincode'         => '',
+                ':gender'          => '',
+                ':whatsapp_no'     => '',
+                ':personal_email'  => $email,
+                ':present_status'  => '',
+                ':organization'    => '',
+                ':remarks'         => '',
+            ]);
+
+        } else {
+            // 2019, 2020, 2021 admission tables (no mailing_address and no permanent_address)
+            $batch_stmt = $conn->prepare(
+                "INSERT INTO $batchTable (timestamp, username, first_name, last_name, dob, roll_no, city, state, country, pincode, gender, whatsapp_no, personal_email, present_status, organization, remarks)
+                 VALUES (:timestamp, :username, :first_name, :last_name, :dob, :roll_no, :city, :state, :country, :pincode, :gender, :whatsapp_no, :personal_email, :present_status, :organization, :remarks)"
+            );
+            $batch_stmt->execute([
+                ':timestamp'       => date('Y-m-d H:i:s'),
+                ':username'        => $email,
+                ':first_name'      => $firstName,
+                ':last_name'       => $lastName,
+                ':dob'             => '',
+                ':roll_no'         => $rollNumber,
                 ':city'            => '',
                 ':state'           => '',
                 ':country'         => '',

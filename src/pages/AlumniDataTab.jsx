@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Plus, Table as TableIcon, CheckCircle, AlertCircle, Loader, ChevronDown } from 'lucide-react';
 
-// ─── Backend API base URL ───────────────────────────────────────────────────
-const API_BASE = 'http://localhost/alumni-portal/backend/api/alumni_data.php';
+const API_BASE = '/alumni-portal/backend/api/alumni_data.php';
 
 // ─── Field configs per dataset ─────────────────────────────────────────────
 const fieldConfigs = {

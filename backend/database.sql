@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `alumni_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `batch` varchar(10) NOT NULL,
+  `batch` varchar(50) NOT NULL,
   `roll_number` varchar(50) NOT NULL,
   `profile_completed` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
