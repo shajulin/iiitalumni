@@ -1,136 +1,168 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Users, BookOpen, Calendar, Award, ArrowRight } from 'lucide-react';
+import { Award, ArrowRight, TrendingUp, Globe, Building2, CheckCircle, ShieldCheck, Users, Briefcase, UserCheck, MessageSquare } from 'lucide-react';
 import './Home.css';
 
 const Home = () => {
   return (
     <div className="home-page">
-      {/* Hero Banner */}
+
+      {/* ── 1. HERO SECTION (4K Ultra HD Drone Campus View) ── */}
       <section className="hero">
         <div className="hero-overlay"></div>
         <div className="container hero-content">
-          <h1>Welcome Back to Your Alma Mater</h1>
-          <p>Connect, Engage, and Grow with the IIIT Kottayam Alumni Network.</p>
+          <div className="hero-badge">
+            <ShieldCheck size={16} /> Official Alumni Network — IIIT Kottayam
+          </div>
+          <h1>
+            Generating Knowledge <br />for the Future
+          </h1>
+          <p>
+            Welcome to the Official Alumni Association of the Indian Institute of Information Technology Kottayam. Reconnect with batchmates, collaborate on frontier research, mentor rising engineers, and explore global career horizons.
+          </p>
           <div className="hero-actions">
-            <Link to="/register" className="btn btn-primary">Join the Network</Link>
-            <Link to="/directory" className="btn btn-secondary glass">Find Alumni</Link>
+            <Link to="/directory" className="hero-btn-primary">
+              <Users size={18} /> Explore Alumni Directory
+            </Link>
+            <Link to="/about" className="hero-btn-secondary">
+              About Alma Mater <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Alumni Statistics */}
-      <section className="statistics section-padding">
+      {/* ── 2. OFFICIAL STATISTICS (Floating Elevated Card) ── */}
+      <section className="statistics">
         <div className="container">
           <div className="stats-grid">
             <div className="stat-card">
-              <Users size={40} className="stat-icon" />
-              <h3>5000+</h3>
-              <p>Global Alumni</p>
+              <TrendingUp size={36} className="stat-icon" style={{ color: '#10b981' }} />
+              <h3>₹58.93 LPA</h3>
+              <p>Highest CTC Offered</p>
             </div>
             <div className="stat-card">
-              <BookOpen size={40} className="stat-icon" />
-              <h3>15+</h3>
-              <p>Programs</p>
+              <Award size={36} className="stat-icon" style={{ color: 'var(--secondary-color)' }} />
+              <h3>₹14.32 LPA</h3>
+              <p>Average Package</p>
             </div>
             <div className="stat-card">
-              <Award size={40} className="stat-icon" />
-              <h3>300+</h3>
-              <p>Founders & CEOs</p>
+              <Globe size={36} className="stat-icon" style={{ color: '#3b82f6' }} />
+              <h3>85%+</h3>
+              <p>Global Placements</p>
             </div>
             <div className="stat-card">
-              <Calendar size={40} className="stat-icon" />
-              <h3>50+</h3>
-              <p>Yearly Events</p>
+              <Building2 size={36} className="stat-icon" style={{ color: '#8b5cf6' }} />
+              <h3>53 Acres</h3>
+              <p>Permanent Green Campus</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Welcome Message */}
-      <section className="welcome section-padding bg-light">
+      {/* ── 3. OFFICIAL WELCOME & INSTITUTION SHOWCASE ── */}
+      <section className="welcome">
         <div className="container welcome-container">
           <div className="welcome-text">
-            <h2>Welcome to the IIITK Alumni Portal</h2>
-            <p>Our alumni are our greatest pride. This platform is designed to keep you connected with the institute and with each other. Whether you are looking for mentorship, career opportunities, or just want to catch up with old friends, you are in the right place.</p>
-            <Link to="/about" className="link-with-icon">Read our story <ArrowRight size={16}/></Link>
+            <span className="tagline">An Institution of National Importance</span>
+            <h2>Imparting Top-Notch Technological Education</h2>
+            <p>
+              IIIT Kottayam imparts premier technological education at the undergraduate, postgraduate and doctoral levels and occupies a leading position among the newly formed IIITs under the Ministry of Education, Government of India.
+            </p>
+            <p>
+              By adopting an entrepreneurial approach, utilizing contemporary teaching techniques, and addressing major societal challenges, we have made technical education responsive to the evolving needs of industry and global academia.
+            </p>
+            <div className="welcome-highlights">
+              <div className="welcome-highlight-item">
+                <CheckCircle size={18} color="#10b981" /> 100% Anti-Ragging Campus
+              </div>
+              <div className="welcome-highlight-item">
+                <CheckCircle size={18} color="#10b981" /> 16 Specialized Research Labs
+              </div>
+              <div className="welcome-highlight-item">
+                <CheckCircle size={18} color="#10b981" /> International MoUs &amp; Exchanges
+              </div>
+              <div className="welcome-highlight-item">
+                <CheckCircle size={18} color="#10b981" /> Active Gyaan Innovation Cell
+              </div>
+            </div>
+            <Link to="/about" className="link-with-icon">
+              Learn more about our institution <ArrowRight size={18} />
+            </Link>
           </div>
-          <div className="welcome-image" style={{ borderRadius: '15px', overflow: 'hidden' }}>
-            <img src="/images/iiitk_campus.jpg" alt="IIITK Campus" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Alumni & Success Stories */}
-      <section className="featured section-padding">
-        <div className="container">
-          <h2 className="section-title">Spotlight & Success Stories</h2>
-          <div className="cards-grid">
-            <div className="card">
-              <div className="card-img" style={{ height: '200px' }}><img src="/images/alumni_3.jpg" alt="Anand Verma" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
-              <div className="card-content">
-                <h3>Anand Verma</h3>
-                <p className="subtitle">Founder & CEO, TechNova</p>
-                <p>Read about his journey from IIIT Kottayam to raising $5M for his AI startup.</p>
-                <Link to="/distinguished" className="link-with-icon">Read More <ArrowRight size={16}/></Link>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-img" style={{ height: '200px' }}><img src="/images/alumni_2.jpg" alt="Priya Patel" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
-              <div className="card-content">
-                <h3>Priya Patel</h3>
-                <p className="subtitle">Product Manager, Microsoft</p>
-                <p>Read about her impactful work in accessible design and global recognition.</p>
-                <Link to="/distinguished" className="link-with-icon">Read More <ArrowRight size={16}/></Link>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-img" style={{ height: '200px' }}><img src="/images/alumni_1.jpg" alt="Rahul Sharma" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
-              <div className="card-content">
-                <h3>Rahul Sharma</h3>
-                <p className="subtitle">Senior Software Engineer, Google</p>
-                <p>Discover how he contributes to the core Android OS team.</p>
-                <Link to="/distinguished" className="link-with-icon">Read More <ArrowRight size={16}/></Link>
-              </div>
-            </div>
+          <div className="welcome-image-wrapper">
+            <img 
+              src="/images/campus/newiiitk.jpg" 
+              alt="IIIT Kottayam Modern Academic Complex" 
+            />
           </div>
         </div>
       </section>
 
-      {/* Latest News & Upcoming Events */}
-      <section className="news-events section-padding bg-light">
+      {/* ── 4. TOP RECRUITERS & GLOBAL INDUSTRY PARTNERS ── */}
+      <section className="recruiters-section">
+        <div className="container text-center">
+          <span className="section-subtitle-tag" style={{ textAlign: 'center', display: 'block' }}>Career &amp; Industry Placement Reach</span>
+          <h2 className="section-title" style={{ marginTop: '8px', marginBottom: '16px' }}>Where Our Alumni Excel</h2>
+          <p className="subtitle" style={{ maxWidth: '700px', margin: '0 auto 36px', textAlign: 'center', color: '#64748b', fontSize: '1.02rem' }}>
+            Graduates of IIIT Kottayam contribute at the forefront of global engineering, research, and product leadership across premier multinationals.
+          </p>
+          <div className="recruiters-badges">
+            {['Amazon', 'NVIDIA', 'Google', 'Microsoft', 'Palo Alto Networks', 'Bosch', 'IBM', 'Human Resocia (Japan)', 'Goldman Sachs', 'Deloitte', 'Commvault', 'Zoho Corporation', 'Tata Elxsi', 'TCS', 'Infosys', 'Cognizant'].map(company => (
+              <div key={company} className="company-badge">
+                {company}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. LATEST NEWS & UPCOMING EVENTS ── */}
+      <section className="news-events">
         <div className="container">
           <div className="split-layout">
             <div className="news-section">
-              <h2 className="section-title" style={{textAlign: 'left'}}>Latest News</h2>
+              <span className="section-subtitle-tag">Announcements</span>
+              <h3 className="section-heading-sm">Latest Institute &amp; Alumni News</h3>
               <div className="news-list">
                 <div className="news-item">
-                  <div className="news-date" style={{ minWidth: '60px', textAlign: 'center' }}>Jun 15</div>
+                  <div className="news-date-badge">
+                    <span className="month">NOV</span>
+                    <span className="day">21</span>
+                  </div>
                   <div className="news-content">
-                    <h4>IIITK Achieves 100% Placements</h4>
-                    <p>Class of 2026 sets a new benchmark across top multinationals.</p>
+                    <h4>Staff Recruitment &amp; Research Fellow Updates</h4>
+                    <p>Updates of Staff Recruitment against Advt. No. IIITK/01/12/2025.</p>
                   </div>
                 </div>
                 <div className="news-item">
-                  <div className="news-date" style={{ minWidth: '60px', textAlign: 'center' }}>May 28</div>
+                  <div className="news-date-badge">
+                    <span className="month">AUG</span>
+                    <span className="day">15</span>
+                  </div>
                   <div className="news-content">
-                    <h4>TechNova Raises Series A</h4>
-                    <p>Alumni-led startup secures $5M funding.</p>
+                    <h4>e-M.Tech &amp; Ph.D. Admissions August Batch</h4>
+                    <p>List of candidates provisionally selected for advanced degree programmes.</p>
                   </div>
                 </div>
                 <div className="news-item">
-                  <div className="news-date" style={{ minWidth: '60px', textAlign: 'center' }}>Apr 10</div>
+                  <div className="news-date-badge">
+                    <span className="month">JUL</span>
+                    <span className="day">08</span>
+                  </div>
                   <div className="news-content">
-                    <h4>New Research Block Inaugurated</h4>
-                    <p>Advanced labs for Cyber Security and Data Science open.</p>
+                    <h4>MoU with Human Resocia &amp; Global IT Talent Japan</h4>
+                    <p>Bilateral partnership facilitating student placements and international internships.</p>
                   </div>
                 </div>
               </div>
-              <Link to="/news" className="btn btn-secondary mt-4">View All News</Link>
+              <div style={{ marginTop: '24px' }}>
+                <Link to="/news" className="btn btn-secondary">View All News &amp; Bulletins</Link>
+              </div>
             </div>
             
             <div className="events-section">
-              <h2 className="section-title" style={{textAlign: 'left'}}>Upcoming Events</h2>
+              <span className="section-subtitle-tag">Gatherings</span>
+              <h3 className="section-heading-sm">Upcoming Events</h3>
               <div className="events-list">
                 <div className="event-item">
                   <div className="event-calendar">
@@ -138,8 +170,8 @@ const Home = () => {
                     <span className="day">15</span>
                   </div>
                   <div className="event-info">
-                    <h4>Global Alumni Meet 2026</h4>
-                    <p>Campus & Virtual</p>
+                    <h4>Global Alumni Reunion 2026</h4>
+                    <p>Varenyam Senate Hall, IIITK Campus &amp; Hybrid</p>
                   </div>
                 </div>
                 <div className="event-item">
@@ -148,26 +180,54 @@ const Home = () => {
                     <span className="day">22</span>
                   </div>
                   <div className="event-info">
-                    <h4>Tech Talk: Future of AI</h4>
-                    <p>Virtual (Zoom)</p>
+                    <h4>Tech Talk: Future of AI in Enterprise</h4>
+                    <p>Zoom Webinar with Industry Alumni</p>
+                  </div>
+                </div>
+                <div className="event-item">
+                  <div className="event-calendar">
+                    <span className="month">SEP</span>
+                    <span className="day">10</span>
+                  </div>
+                  <div className="event-info">
+                    <h4>ICITIIT International Conference 2026</h4>
+                    <p>Annual Computing &amp; IT Flagship Symposium</p>
                   </div>
                 </div>
               </div>
-              <Link to="/events" className="btn btn-secondary mt-4">View All Events</Link>
+              <div style={{ marginTop: '24px' }}>
+                <Link to="/events" className="btn btn-secondary">View All Events</Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Quick Links */}
-      <section className="quick-links section-padding text-center">
-        <div className="container">
-          <h2>Looking for something else?</h2>
-          <div className="quick-links-grid mt-4">
-            <Link to="/give-back" className="quick-link-box">Make a Donation</Link>
-            <Link to="/jobs" className="quick-link-box">Post a Job</Link>
-            <Link to="/mentorship" className="quick-link-box">Become a Mentor</Link>
-            <Link to="/contact" className="quick-link-box">Update Contact Info</Link>
+      {/* ── 6. QUICK LINKS / ACTIONS ── */}
+      <section className="quick-links">
+        <div className="container text-center">
+          <span className="section-subtitle-tag" style={{ textAlign: 'center', display: 'block' }}>Engage &amp; Contribute</span>
+          <h2 className="section-title" style={{ marginTop: '8px', marginBottom: '12px' }}>Connect with IIIT Kottayam Alumni Portal</h2>
+          <p style={{ color: '#64748b', maxWidth: '640px', margin: '0 auto 10px', fontSize: '1.02rem' }}>
+            Everything you need to give back, connect, and collaborate with your alma mater.
+          </p>
+          <div className="quick-links-grid">
+            <Link to="/directory" className="quick-link-box">
+              <Users size={32} color="var(--primary-color)" />
+              <span>Find Alumni Directory</span>
+            </Link>
+            <Link to="/jobs" className="quick-link-box">
+              <Briefcase size={32} color="var(--primary-color)" />
+              <span>Jobs &amp; Referrals</span>
+            </Link>
+            <Link to="/mentorship" className="quick-link-box">
+              <UserCheck size={32} color="var(--primary-color)" />
+              <span>Become a Mentor</span>
+            </Link>
+            <Link to="/contact" className="quick-link-box">
+              <MessageSquare size={32} color="var(--primary-color)" />
+              <span>Contact Administration</span>
+            </Link>
           </div>
         </div>
       </section>

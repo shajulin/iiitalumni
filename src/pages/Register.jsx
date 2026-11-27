@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { dataService } from '../services/dataService';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Register = () => {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -30,30 +31,23 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/alumni-portal/backend/api/register.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName:        formData.fullName,
-          email:           formData.email,
-          password:        formData.password,
-          confirmPassword: formData.confirmPassword,
-          batch:           formData.batch,
-          rollNumber:      formData.rollNumber,
-        }),
+      const res = dataService.registerUser({
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        batch: formData.batch,
+        rollNumber: formData.rollNumber,
       });
 
-      const data = await response.json();
-
-      if (data.status === 'success') {
-        setSuccess(`✅ Registration successful! Saved to "${data.table}" table. Redirecting to login...`);
-        setTimeout(() => navigate('/login'), 2000);
+      if (res.status === 'success') {
+        setSuccess(`✅ Registration successful! Saved to "${res.table}" dataset. Redirecting to login...`);
+        setTimeout(() => navigate('/login'), 1500);
       } else {
-        setError(data.message || 'Registration failed');
+        setError(res.message || 'Registration failed');
       }
     } catch (err) {
       console.error(err);
-      setError('Cannot connect to server. Make sure XAMPP is running.');
+      setError('Failed to complete registration.');
     } finally {
       setLoading(false);
     }

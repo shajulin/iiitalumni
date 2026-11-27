@@ -3,44 +3,77 @@ import { Mail, Phone, Users, BookOpen, Star, UserCheck } from 'lucide-react';
 
 const committeeMembers = [
   {
+    role: 'Patron',
+    name: 'Prof. Prasad Krishna',
+    designation: 'Director (Additional Charge), IIIT Kottayam',
+    photo: '/images/faculty/director.jpeg',
+    contact: 'director@iiitkottayam.ac.in',
+    category: 'Leadership',
+  },
+  {
+    role: 'Advisory',
+    name: 'Dr. M Radhakrishnan',
+    designation: 'Registrar, IIIT Kottayam',
+    photo: '/images/faculty/registrar.jpeg',
+    contact: 'registrar@iiitkottayam.ac.in',
+    category: 'Leadership',
+  },
+  {
     role: 'Associate Dean – Alumni & International Affairs',
     name: 'Dr. Shajulin Benedict',
-    designation: 'Associate Professor, Dept. of CSE',
-    initials: 'SB',
-    contact: 'alumni@iiitkottayam.ac.in',
+    designation: 'Associate Professor, Department of CSE',
+    photo: '/images/faculty/shajulin.jpg',
+    contact: 'shajulin@iiitkottayam.ac.in',
     category: 'Faculty Coordinator',
   },
   {
-    role: 'Faculty Coordinator – Alumni Relations',
-    name: 'Faculty Representative',
-    designation: 'Department of ECE / CSE',
-    initials: 'FR',
-    contact: 'alumni@iiitkottayam.ac.in',
+    role: 'Associate Dean – Career Development & Student Welfare',
+    name: 'Dr. J. V. Bibal Benifa',
+    designation: 'Associate Professor, Department of CSE',
+    photo: '/images/faculty/bibal.jpg',
+    contact: 'benifa@iiitkottayam.ac.in',
+    category: 'Faculty Coordinator',
+  },
+  {
+    role: 'Associate Dean – Industry Relations & Funding',
+    name: 'Dr. Ragesh G. K.',
+    designation: 'Associate Professor, Department of ECE',
+    photo: '/images/faculty/ragesh.jpeg',
+    contact: 'ragesh@iiitkottayam.ac.in',
+    category: 'Faculty Coordinator',
+  },
+  {
+    role: 'Associate Dean – Academic Affairs',
+    name: 'Dr. Ebin Deni Raj',
+    designation: 'Associate Professor, Department of CSE',
+    photo: '/images/faculty/ebin.jpeg',
+    contact: 'ebindeniraj@iiitkottayam.ac.in',
     category: 'Faculty Coordinator',
   },
 ];
 
 const officeBearer = [
-  { role: 'President', name: 'Alumni Representative', batch: 'Batch 2019–2023', initials: 'PR', category: 'Office Bearer' },
-  { role: 'Vice President', name: 'Alumni Representative', batch: 'Batch 2019–2023', initials: 'VP', category: 'Office Bearer' },
-  { role: 'Secretary', name: 'Alumni Representative', batch: 'Batch 2020–2024', initials: 'SE', category: 'Office Bearer' },
-  { role: 'Treasurer', name: 'Alumni Representative', batch: 'Batch 2020–2024', initials: 'TR', category: 'Office Bearer' },
-  { role: 'Joint Secretary', name: 'Alumni Representative', batch: 'Batch 2021–2025', initials: 'JS', category: 'Office Bearer' },
-  { role: 'Executive Member', name: 'Alumni Representative', batch: 'Batch 2021–2025', initials: 'EM', category: 'Office Bearer' },
+  { role: 'Alumni President', name: 'Vinay Kumar Maddiralla', batch: 'Founding Batch (2016–2020)', initials: 'VK', category: 'Office Bearer' },
+  { role: 'Vice President', name: 'Sai Surya Kiran Pokala', batch: 'Batch (2016–2020)', initials: 'SK', category: 'Office Bearer' },
+  { role: 'Secretary', name: 'Rahul Sharma', batch: 'Batch (2019–2023)', initials: 'RS', category: 'Office Bearer' },
+  { role: 'Treasurer', name: 'Priya Patel', batch: 'Batch (2020–2024)', initials: 'PP', category: 'Office Bearer' },
+  { role: 'Joint Secretary', name: 'Anand Verma', batch: 'Batch (2018–2022)', initials: 'AV', category: 'Office Bearer' },
+  { role: 'Executive Member', name: 'Sneha Gupta', batch: 'Batch (2021–2025)', initials: 'SG', category: 'Office Bearer' },
 ];
 
-const MemberCard = ({ name, role, designation, batch, initials, contact, category }) => {
+const MemberCard = ({ name, role, designation, batch, photo, initials, contact, category }) => {
   const colors = {
+    'Leadership': { bg: 'var(--primary-color)', badge: '#e8f0fe', badgeText: '#1a56db' },
     'Faculty Coordinator': { bg: 'var(--primary-color)', badge: '#e8f0ff', badgeText: 'var(--primary-color)' },
     'Office Bearer': { bg: 'var(--secondary-color)', badge: '#fff3e0', badgeText: '#b35c00' },
   };
   const c = colors[category] || colors['Office Bearer'];
 
   return (
-    <div className="card p-4 text-center">
+    <div className="card p-4 text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{
-        width: '80px',
-        height: '80px',
+        width: '88px',
+        height: '88px',
         borderRadius: '50%',
         background: c.bg,
         display: 'flex',
@@ -48,25 +81,32 @@ const MemberCard = ({ name, role, designation, batch, initials, contact, categor
         justifyContent: 'center',
         margin: '0 auto 14px',
         border: '3px solid rgba(0,0,0,0.08)',
+        overflow: 'hidden',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
       }}>
-        <span style={{ color: 'white', fontWeight: 700, fontSize: '1.4rem' }}>{initials}</span>
+        {photo ? (
+          <img src={photo} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <span style={{ color: 'white', fontWeight: 700, fontSize: '1.4rem' }}>{initials}</span>
+        )}
       </div>
       <span style={{
         display: 'inline-block',
         background: c.badge,
         color: c.badgeText,
-        fontSize: '0.75rem',
+        fontSize: '0.72rem',
         fontWeight: 700,
-        padding: '2px 10px',
+        padding: '3px 10px',
         borderRadius: '20px',
         marginBottom: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '0.5px'
+        letterSpacing: '0.4px',
+        maxWidth: '100%'
       }}>{role}</span>
-      <h4 style={{ color: 'var(--primary-color)', marginBottom: '4px', fontSize: '1rem' }}>{name}</h4>
-      <p style={{ color: '#6c757d', fontSize: '0.87rem', marginBottom: '4px' }}>{designation || batch}</p>
+      <h4 style={{ color: 'var(--primary-color)', marginBottom: '4px', fontSize: '1.02rem', fontWeight: 600 }}>{name}</h4>
+      <p style={{ color: '#6c757d', fontSize: '0.84rem', marginBottom: '4px', flex: 1 }}>{designation || batch}</p>
       {contact && (
-        <a href={`mailto:${contact}`} style={{ color: 'var(--secondary-color)', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '6px' }}>
+        <a href={`mailto:${contact}`} style={{ color: 'var(--secondary-color)', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '6px' }}>
           <Mail size={13} /> {contact}
         </a>
       )}

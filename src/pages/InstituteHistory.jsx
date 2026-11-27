@@ -1,48 +1,49 @@
 import React from 'react';
-import { Calendar, MapPin, Award, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, Award, ArrowRight, CheckCircle2, Building, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const milestones = [
   {
     year: '2015',
-    title: 'Foundation & Establishment',
+    title: 'Establishment under PPP Model',
     description:
-      'IIIT Kottayam was established under the Public-Private Partnership (PPP) model of the Government of India, Ministry of Education. The institute commenced academic operations at a temporary campus hosted by Amal Jyothi College of Engineering, Kanjirappally.',
+      'IIIT Kottayam was established by the Ministry of Education (formerly MHRD), Government of India, the Government of Kerala, and industry partners under the Public-Private Partnership (PPP) model to develop top-notch IT talent in India.',
   },
   {
     year: '2016',
-    title: 'First Academic Batch',
+    title: 'First B.Tech Admissions via JoSAA',
     description:
-      'The inaugural batch of B.Tech students began their academic journey, marking the start of a new chapter in technical education in Kerala. The institute offered programmes in Computer Science & Engineering and Electronics & Communication Engineering.',
+      'The inaugural batch of undergraduate engineering students in Computer Science & Engineering (CSE) and Electronics & Communication Engineering (ECE) commenced their studies via JEE Main through JoSAA/CSAB counselling.',
   },
   {
     year: '2017',
-    title: 'Institution of National Importance',
+    title: 'Institute of National Importance (Act of Parliament)',
     description:
-      'IIIT Kottayam was accorded the prestigious status of an "Institution of National Importance" by an Act of Parliament — placing it among the most distinguished technical institutes in India and granting it greater academic and administrative autonomy.',
+      'The Parliament of India passed the Indian Institutes of Information Technology (Public-Private Partnership) Act 2017, conferring IIIT Kottayam the prestigious status of an "Institute of National Importance", granting statutory autonomy.',
   },
   {
     year: '2019',
-    title: 'Permanent Campus Inaugurated',
+    title: 'Relocation to Permanent 53-Acre Campus at Valavoor',
     description:
-      'The institute relocated to its permanent, purpose-built campus at Valavoor, near Pala, in the Kottayam district of Kerala. The new campus features modern academic blocks, research laboratories, student hostels, and state-of-the-art facilities.',
+      'The institute transitioned to its permanent campus set across 53 picturesque acres in Valavoor village, near Pala, Kottayam. The campus features state-of-the-art academic complexes, research facilities, and residential student hostels.',
   },
   {
     year: '2020',
-    title: 'Research & PG Programmes',
+    title: 'Launch of Advanced Research & PG Programmes',
     description:
-      'Expansion of academic offerings with the introduction of postgraduate programmes and a strengthened focus on research in domains such as IoT, Data Science, Cybersecurity, Cloud Computing, and Artificial Intelligence.',
+      'Introduction of Ph.D. programmes in CSE, ECE, and Computational Mathematics, as well as specialized M.Tech programmes in Artificial Intelligence, Data Science, and Cyber Security for working professionals and researchers.',
   },
   {
     year: '2021',
-    title: 'Growing Alumni Network',
+    title: 'Global Partnerships & First Alumni Chapter',
     description:
-      'The first generation of alumni began making their mark in top technology companies, research institutions, and entrepreneurial ventures globally. Alumni relations were formally strengthened with the appointment of an Associate Dean for Alumni & International Affairs.',
+      'Establishment of international MoUs with world-class institutions including Technical University of Munich (TUM) Germany, University of Agder Norway, and University of New Brunswick Canada. The inaugural batches stepped out into top tech firms worldwide.',
   },
   {
-    year: '2022–Present',
-    title: 'Continued Excellence',
+    year: '2022–2026',
+    title: 'Record Milestones & Global Placement Leadership',
     description:
-      'IIIT Kottayam continues to expand its research output, industry partnerships, and academic collaborations. The institute remains committed to its motto of "Generating Knowledge for the Future" and to shaping the next generation of technology leaders.',
+      'Placement benchmarks surged with highest CTC touching ₹58.93 LPA and overseas placements in Tokyo, Japan with Human Resocia. Expansion of 16 Innovation & Incubation Labs, Gyaan Innovation Cell, and opening of the "Varenyam" Senate Hall.',
   },
 ];
 
@@ -53,110 +54,88 @@ const InstituteHistory = () => {
 
         {/* Header */}
         <div className="about-header text-center mb-5">
-          <h1 className="section-title">Institute History</h1>
-          <p className="subtitle">Tracing the journey of IIIT Kottayam — from its founding to a nationally recognised institution</p>
+          <span style={{ color: 'var(--secondary-color)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.85rem' }}>Heritage &amp; Milestones</span>
+          <h1 className="section-title" style={{ marginTop: '6px' }}>History of IIIT Kottayam</h1>
+          <p className="subtitle">Tracing the evolution of IIIT Kottayam from its foundation to an Institute of National Importance.</p>
         </div>
 
         {/* Overview Card */}
         <div className="about-grid" style={{ marginBottom: '60px' }}>
           <div className="about-text">
-            <h2>Our Journey</h2>
+            <h2 style={{ color: 'var(--primary-color)' }}>A Journey of Excellence</h2>
             <p>
-              The Indian Institute of Information Technology Kottayam (IIIT Kottayam) stands as a testament to India's commitment to advancing technological education and research. Born from a collaborative vision of the Government of India, the State of Kerala, and industry partners, the institute has grown rapidly from a nascent institution to a nationally recognised centre of excellence.
+              The Indian Institute of Information Technology Kottayam stands as a premier national institution committed to technological excellence and societal transformation. Conceived through the joint initiative of the Government of India, the State of Kerala, and industry leaders, the institute has grown at an extraordinary pace.
             </p>
             <p>
-              Located in the tranquil landscape of Valavoor, Pala — in the heart of Kerala — IIIT Kottayam was conceived under the PPP model to address the growing demand for high-quality technical education and applied IT research in the country.
+              Spread across a scenic 53-acre hillside campus at Valavoor, Pala, IIIT Kottayam provides an enriching academic environment fostering innovative thinking, entrepreneurial spirit, and research with real-world impact.
             </p>
             <p>
-              Each phase of the institute's growth reflects the dedication of its faculty, staff, students, and the broader community of stakeholders who have contributed to making IIIT Kottayam what it is today.
+              Each chapter of our history has been written by the tireless contributions of distinguished faculty, dedicated administrators, energetic students, and our ever-growing network of successful alumni.
             </p>
+            <div className="mt-4">
+              <Link to="/about/director" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                Director's Message <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
-          <div className="about-image">
-            <img src="/images/iiitk_campus.jpg" alt="IIIT Kottayam Permanent Campus" className="rounded-image shadow" />
+          <div className="about-image" style={{ borderRadius: '15px', overflow: 'hidden', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' }}>
+            <img src="/images/campus/iiitview_1.jpg" alt="IIIT Kottayam Campus Hilltop Panoramic View" className="rounded-image shadow" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
 
-        {/* Key Facts */}
+        {/* Key Pillars */}
         <div className="mission-vision-grid" style={{ marginBottom: '60px' }}>
           <div className="card text-center p-4">
             <Calendar size={40} className="text-primary mb-3 mx-auto" />
-            <h3>2015</h3>
-            <p>Year of Establishment under the PPP Model of Government of India</p>
+            <h3 style={{ color: 'var(--primary-color)' }}>Founded in 2015</h3>
+            <p style={{ color: '#555', fontSize: '0.92rem', margin: 0 }}>Established by Ministry of Education, Govt. of India, Govt. of Kerala, and Industry Partners.</p>
           </div>
           <div className="card text-center p-4">
             <Award size={40} className="text-primary mb-3 mx-auto" />
-            <h3>2017</h3>
-            <p>Declared an Institution of National Importance by Act of Parliament</p>
+            <h3 style={{ color: 'var(--primary-color)' }}>Act of Parliament 2017</h3>
+            <p style={{ color: '#555', fontSize: '0.92rem', margin: 0 }}>Statutory autonomy as an "Institute of National Importance" under the IIIT (PPP) Act 2017.</p>
           </div>
           <div className="card text-center p-4">
             <MapPin size={40} className="text-primary mb-3 mx-auto" />
-            <h3>2019</h3>
-            <p>Inauguration of permanent campus at Valavoor, Pala, Kottayam, Kerala</p>
+            <h3 style={{ color: 'var(--primary-color)' }}>53-Acre Campus</h3>
+            <p style={{ color: '#555', fontSize: '0.92rem', margin: 0 }}>Permanent green campus at Valavoor, Pala with modern academic blocks and research halls.</p>
           </div>
         </div>
 
-        {/* Timeline */}
-        <h2 className="section-title">Milestones & Timeline</h2>
-        <div style={{ position: 'relative', paddingLeft: '32px' }}>
-          {/* Vertical line */}
-          <div style={{
-            position: 'absolute',
-            left: '12px',
-            top: '12px',
-            bottom: '12px',
-            width: '2px',
-            background: 'linear-gradient(to bottom, var(--primary-color), var(--secondary-color))',
-            borderRadius: '2px'
-          }} />
-
-          {milestones.map((m, idx) => (
-            <div key={idx} style={{ position: 'relative', marginBottom: '40px' }}>
-              {/* Dot */}
+        {/* Chronological Timeline */}
+        <h2 className="section-title text-center" style={{ marginBottom: '40px' }}>Key Institutional Milestones</h2>
+        <div style={{ maxWidth: '850px', margin: '0 auto', position: 'relative', paddingLeft: '32px', borderLeft: '3px solid var(--secondary-color)' }}>
+          {milestones.map((item, idx) => (
+            <div key={idx} style={{ marginBottom: '36px', position: 'relative' }}>
               <div style={{
                 position: 'absolute',
-                left: '-26px',
-                top: '6px',
-                width: '16px',
-                height: '16px',
+                left: '-44px',
+                top: '0',
+                width: '22px',
+                height: '22px',
                 borderRadius: '50%',
-                background: idx % 2 === 0 ? 'var(--primary-color)' : 'var(--secondary-color)',
-                border: '3px solid white',
-                boxShadow: '0 0 0 2px ' + (idx % 2 === 0 ? 'var(--primary-color)' : 'var(--secondary-color)'),
+                background: 'var(--primary-color)',
+                border: '3px solid var(--secondary-color)',
+                boxShadow: '0 0 0 4px rgba(247, 148, 29, 0.2)'
               }} />
-
-              <div className="card p-4">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px', flexWrap: 'wrap' }}>
-                  <span style={{
-                    background: 'var(--primary-color)',
-                    color: 'white',
-                    padding: '2px 12px',
-                    borderRadius: '20px',
-                    fontSize: '0.88rem',
-                    fontWeight: 700
-                  }}>{m.year}</span>
-                  <h4 style={{ color: 'var(--primary-color)', margin: 0 }}>{m.title}</h4>
-                </div>
-                <p style={{ color: '#555', lineHeight: 1.7, margin: 0 }}>{m.description}</p>
+              <div className="card p-4" style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
+                <span style={{
+                  background: 'var(--primary-color)',
+                  color: '#fff',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  padding: '3px 10px',
+                  borderRadius: '12px',
+                  display: 'inline-block',
+                  marginBottom: '8px'
+                }}>
+                  {item.year}
+                </span>
+                <h3 style={{ color: 'var(--primary-color)', margin: '4px 0 10px', fontSize: '1.2rem' }}>{item.title}</h3>
+                <p style={{ color: '#555', lineHeight: 1.7, fontSize: '0.94rem', margin: 0 }}>{item.description}</p>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* PPP Model Note */}
-        <div className="card p-5 mt-5" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #fff 100%)', border: '1px solid #d0d9f0' }}>
-          <h3 style={{ color: 'var(--primary-color)', marginBottom: '12px' }}>About the PPP Model</h3>
-          <p style={{ color: '#555', lineHeight: 1.8 }}>
-            IIIT Kottayam was established under the Government of India's initiative to set up new IIITs through the Public-Private Partnership model. Under this model, the Central Government, the State Government of Kerala, and industry partners collectively contribute to the establishment and sustenance of the institute. This collaborative approach ensures that the institute remains closely aligned with both national development priorities and the practical demands of the technology industry.
-          </p>
-          <a
-            href="https://www.iiitkottayam.ac.in"
-            target="_blank"
-            rel="noreferrer"
-            className="link-with-icon mt-4"
-            style={{ display: 'inline-flex' }}
-          >
-            Visit Official Website <ArrowRight size={16} />
-          </a>
         </div>
 
       </div>

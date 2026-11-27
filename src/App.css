@@ -50,13 +50,13 @@
   color: #fff;
 }
 
-/* Glowing ring on logo emblem */
-.navbar .logo > div:first-child {
-  box-shadow: 0 0 0 2px #f7941d, 0 0 16px rgba(247, 148, 29, 0.5) !important;
-  transition: box-shadow 0.3s ease;
+/* Logo emblem transition */
+.navbar .navbar-logo-img {
+  transition: transform 0.25s ease, filter 0.25s ease;
 }
-.navbar .logo:hover > div:first-child {
-  box-shadow: 0 0 0 3px #f7941d, 0 0 28px rgba(247, 148, 29, 0.75) !important;
+.navbar .logo:hover .navbar-logo-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 2px 12px rgba(247, 148, 29, 0.6)) !important;
 }
 
 /* Logo text colors on dark bg */

@@ -19,23 +19,27 @@ const DirectorMessage = () => {
             {/* Director Photo */}
             <div style={{ textAlign: 'center', flexShrink: 0 }}>
               <div style={{
-                width: '200px',
-                height: '200px',
+                width: '180px',
+                height: '180px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--primary-color) 0%, #1a4a9e 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                overflow: 'hidden',
                 margin: '0 auto 16px',
                 border: '4px solid var(--secondary-color)',
-                overflow: 'hidden',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                boxShadow: '0 8px 24px rgba(0,0,0,0.18)'
               }}>
-                <span style={{ fontSize: '72px', color: 'white', fontWeight: 700, lineHeight: 1 }}>PK</span>
+                <img
+                  src="/images/faculty/director.jpeg"
+                  alt="Prof. Prasad Krishna"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
               </div>
-              <h3 style={{ color: 'var(--primary-color)', marginBottom: '4px' }}>Prof. Prasad Krishna</h3>
-              <p style={{ color: 'var(--secondary-color)', fontWeight: 600, fontSize: '0.95rem' }}>Director (Additional Charge)</p>
-              <p style={{ color: '#6c757d', fontSize: '0.88rem', marginTop: '4px' }}>IIIT Kottayam</p>
+              <h3 style={{ color: 'var(--primary-color)', marginBottom: '4px', fontSize: '1.25rem' }}>Prof. Prasad Krishna</h3>
+              <p style={{ color: 'var(--secondary-color)', fontWeight: 600, fontSize: '0.92rem' }}>Director (Additional Charge)</p>
+              <p style={{ color: '#6c757d', fontSize: '0.85rem', marginTop: '2px' }}>IIIT Kottayam &amp; Director, NIT Calicut</p>
+              <div style={{ marginTop: '10px', fontSize: '0.85rem', color: '#475569' }}>
+                <div>📧 <a href="mailto:director@iiitkottayam.ac.in" style={{ color: 'var(--primary-color)', fontWeight: 500 }}>director@iiitkottayam.ac.in</a></div>
+                <div>📞 +91 0482-2202137 / 2202112</div>
+              </div>
             </div>
 
             {/* Director Message */}

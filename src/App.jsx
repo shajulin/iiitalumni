@@ -37,35 +37,19 @@ const Navbar = () => {
 
         {/* ── LOGO: Official IIIT Kottayam Logo & Name ── */}
         <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
-          {/* Official IIIT Kottayam emblem rendered as inline SVG placeholder matching the institute's seal style */}
-          <div style={{
-            width: '52px',
-            height: '52px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #0d2b5e 0%, #1a4a9e 100%)',
-            border: '2px solid #f7941d',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            boxShadow: '0 2px 8px rgba(13,43,94,0.3)'
-          }}>
-            <svg viewBox="0 0 52 52" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
-              {/* Outer ring */}
-              <circle cx="26" cy="26" r="23" fill="none" stroke="#f7941d" strokeWidth="1.2" />
-              {/* Inner circle */}
-              <circle cx="26" cy="26" r="16" fill="#0d2b5e" />
-              {/* IIIT text */}
-              <text x="26" y="23" textAnchor="middle" fill="#f7941d" fontSize="7" fontWeight="bold" fontFamily="Arial, sans-serif">IIIT</text>
-              {/* K text */}
-              <text x="26" y="33" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="Arial, sans-serif">K</text>
-              {/* Stars/dots on ring */}
-              <circle cx="26" cy="3.5" r="1.5" fill="#f7941d" />
-              <circle cx="26" cy="48.5" r="1.5" fill="#f7941d" />
-              <circle cx="3.5" cy="26" r="1.5" fill="#f7941d" />
-              <circle cx="48.5" cy="26" r="1.5" fill="#f7941d" />
-            </svg>
-          </div>
+          {/* Official IIIT Kottayam emblem from https://www.iiitkottayam.ac.in */}
+          <img
+            src="/images/iiitk_logo.png"
+            alt="IIIT Kottayam Official Logo"
+            className="navbar-logo-img"
+            style={{
+              height: '46px',
+              width: 'auto',
+              objectFit: 'contain',
+              flexShrink: 0,
+              filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.35))'
+            }}
+          />
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-color)', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
               Indian Institute of Information Technology Kottayam
@@ -443,12 +427,12 @@ const AppContent = () => {
   // Routes that don't require login
   const isPublicRoute = location.pathname === '/login' || location.pathname === '/register';
 
-  // If not logged in and trying to access a protected page, redirect to login
-  if (!user && !isPublicRoute) {
+  // Only dashboard requires login
+  if (!user && isDashboard) {
     return <Navigate to="/login" replace />;
   }
 
-  // If logged in and trying to access login/register, redirect to home
+  // If already logged in and trying to access login/register, redirect to dashboard or home
   if (user && isPublicRoute) {
     return <Navigate to="/" replace />;
   }

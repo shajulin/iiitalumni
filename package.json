@@ -4,10 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node start.js",
-    "dev": "node start.js",
-    "dev:frontend": "vite",
-    "dev:backend": "node backend/server.js",
+    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },

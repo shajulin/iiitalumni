@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Plus, Table as TableIcon, CheckCircle, AlertCircle, Loader, ChevronDown } from 'lucide-react';
-
-const API_BASE = '/alumni-portal/backend/api/alumni_data.php';
+import { dataService } from '../services/dataService';
 
 // ─── Field configs per dataset ─────────────────────────────────────────────
 const fieldConfigs = {
@@ -201,14 +200,12 @@ const AlumniDataTab = ({ datasetId, datasetName }) => {
 
   const fields = fieldConfigs[datasetId] || [];
 
-  // ── Fetch existing records from backend ──
-  const fetchData = async () => {
+  // ── Fetch existing records from local storage service ──
+  const fetchData = () => {
     setLoading(true);
     try {
-      const res    = await fetch(`${API_BASE}?dataset=${datasetId}`);
-      const result = await res.json();
-      if (result.status === 'success') setData(result.data);
-      else setData([]);
+      const records = dataService.getAlumniData(datasetId);
+      setData(records);
     } catch (err) {
       console.error('Fetch error:', err);
       setData([]);
@@ -229,8 +226,8 @@ const AlumniDataTab = ({ datasetId, datasetName }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // ── POST form data to backend ──
-  const handleSubmit = async (e) => {
+  // ── Save record using local storage service ──
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitting(true);
     setSubmitStatus(null);
@@ -242,46 +239,25 @@ const AlumniDataTab = ({ datasetId, datasetName }) => {
       payload.timestamp = new Date().toLocaleString('en-IN');
     }
 
-    console.log(`[AlumniDataTab] POST → ${API_BASE}?dataset=${datasetId}`);
-    console.log('[AlumniDataTab] Payload:', payload);
-
     try {
-      const res     = await fetch(`${API_BASE}?dataset=${datasetId}`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-      });
-
-      const rawText = await res.text();
-      console.log('[AlumniDataTab] Raw server response:', rawText);
-
-      let result;
-      try {
-        result = JSON.parse(rawText);
-      } catch {
-        setSubmitStatus('error');
-        setSubmitMessage('Server returned invalid response. Check console for details.');
-        setSubmitting(false);
-        return;
-      }
-
+      const result = dataService.addAlumniRecord(datasetId, payload);
       if (result.status === 'success') {
         setSubmitStatus('success');
-        setSubmitMessage(`✅ Data saved successfully to "${datasetName}" table! (ID: ${result.id})`);
+        setSubmitMessage(`✅ Data saved successfully to "${datasetName}" dataset!`);
         setFormData({});
         fetchData(); // refresh table
-        setTimeout(() => { setView('table'); setSubmitStatus(null); }, 2500);
+        setTimeout(() => { setView('table'); setSubmitStatus(null); }, 2000);
       } else {
         setSubmitStatus('error');
         setSubmitMessage('❌ Error: ' + (result.message || 'Unknown error'));
       }
     } catch (err) {
-      console.error('[AlumniDataTab] Network error:', err);
+      console.error('[AlumniDataTab] Save error:', err);
       setSubmitStatus('error');
-      setSubmitMessage('❌ Cannot connect to server. Make sure XAMPP Apache is running.');
+      setSubmitMessage('❌ Error saving record.');
+    } finally {
+      setSubmitting(false);
     }
-
-    setSubmitting(false);
   };
 
   // ─── Styles ───────────────────────────────────────────────────────────────

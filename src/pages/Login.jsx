@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Lock, Mail, ArrowRight } from 'lucide-react';
-
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import { dataService } from '../services/dataService';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -11,27 +10,15 @@ const Login = () => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    try {
-      const response = await fetch('/alumni-portal/backend/api/login.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const data = await response.json();
-
-      if (data.status === 'success') {
-        sessionStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/'); // Redirect to Home instead of Dashboard
-      } else {
-        setError(data.message || 'Login failed');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Cannot connect to server. Ensure XAMPP is running.');
+    const res = dataService.loginUser(formData.email, formData.password);
+    if (res.status === 'success') {
+      navigate('/');
+    } else {
+      setError(res.message || 'Invalid credentials');
     }
   };
 

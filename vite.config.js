@@ -6,16 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    host: '0.0.0.0',
-    proxy: {
-      '/alumni-portal/backend': {
-        target: 'http://localhost:80',
-        changeOrigin: true
-      },
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      }
-    }
+    host: '0.0.0.0'
   }
 })

@@ -64,3 +64,6 @@ dist-ssr/
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+_backend_backup/
+node_modules/.vite/
